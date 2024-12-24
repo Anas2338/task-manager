@@ -74,10 +74,10 @@ export default function Home (){
         <button className="h-[50px] sm:h-[70px] bg-cyan-900 text-[#FFFFFF] rounded-2xl px-6 text-nowrap" onClick={HandleAddTask}>Add Task</button>
       </div>
       <div className="w-auto h-1 border-2 border-gray-600 mx-4 mt-3"></div>
-      <div className=" mx-5 rounded-lg mt-8">
-        <ul>
+      <div className=" mx-5 rounded-lg mt-8 ">
+        <ul className="md:grid sm:grid-cols-2 gap-4">
         {tasks.length == 0? <h1 className="font-sans font-bold text-[22px] text-center mt-10">No Task Available!</h1> : tasks.map((elem, index)=>{
-          return <li className="bg-cyan-800 mt-2 h-[40px] rounded-xl text-[#FFFFFF] pl-5 py-2 flex justify-between px-4 sm:h-[80px] sm:py-6 sm:px-12" key={elem.id}>{index + 1} {elem.title} <button onClick={()=>{DeleteTask(elem.id)}} className="bg-orange-600 px-3 rounded-xl">Delete</button></li>;
+          return <li className="bg-cyan-800 mt-2 h-[40px] rounded-xl text-[#FFFFFF] pl-5 py-2 flex justify-between px-4 sm:h-[80px] sm:py-6 sm:px-12 " key={elem.id}>{index + 1} {elem.title} <button onClick={()=>{DeleteTask(elem.id)}} className="bg-orange-600 px-3 rounded-xl">Delete</button></li>;
         })}
         </ul>
       </div>
