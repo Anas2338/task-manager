@@ -1,101 +1,87 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+import { nanoid } from "nanoid";
+import { useRef, useState } from "react";
+import { ToastContainer, toast, Bounce } from 'react-toastify';
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+export default function Home (){
+  let [tasks, setTasks] = useState<{ title: string; id: string }[]>([]);
+
+  let inputReference = useRef<HTMLInputElement>(null);
+
+  let HandleAddTask = () => {
+    let inputValue = inputReference?.current?.value as string;
+    if (!inputValue){
+      return toast.warn('Please Entre Tasks', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Bounce,
+        });
+      
+    }
+    setTasks ([{title:inputValue, id:nanoid()},...tasks]);
+    if(inputReference.current){
+      inputReference.current.value = ''
+    }
+    toast.success('Added Successfully!', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+      transition: Bounce,
+      });
+  };
+
+  function OnKeyEnter (my_key:{key:string})  {
+    if(my_key.key === 'Enter'){
+      HandleAddTask();
+    }
+  };
+
+  function DeleteTask (e:string){
+    let newArray =  tasks.filter((elem)=> elem.id !== e);
+    setTasks(newArray);
+    toast.error('Task Deleted!', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+      transition: Bounce,
+      });
+  };
+
+  return(
+    <div>
+      <div className="w-screen h-[50px] bg-cyan-800">
+        <h1 className="font-sans text-[#FFFFFF] font-bold text-[30px] text-center">Task Manager</h1>
+      </div>
+      <div className="flex flex-col gap-2 py-2  justify-between px-4 sm:px-10">
+        <input className="h-[50px] w-auto  border-2 border-black  rounded-lg px-5" placeholder="Add Task Here" ref={inputReference} onKeyDown={OnKeyEnter}/>
+        <button className="h-[50px] sm:h-[70px] bg-cyan-900 text-[#FFFFFF] rounded-2xl px-6 text-nowrap" onClick={HandleAddTask}>Add Task</button>
+      </div>
+      <div className="w-auto h-1 border-2 border-gray-600 mx-4 mt-3"></div>
+      <div className=" mx-5 rounded-lg mt-8">
+        <ul>
+        {tasks.length == 0? <h1 className="font-sans font-bold text-[22px] text-center mt-10">No Task Available!</h1> : tasks.map((elem, index)=>{
+          return <li className="bg-cyan-800 mt-2 h-[40px] rounded-xl text-[#FFFFFF] pl-5 py-2 flex justify-between px-4 sm:h-[80px] sm:py-6 sm:px-12" key={elem.id}>{index + 1} {elem.title} <button onClick={()=>{DeleteTask(elem.id)}} className="bg-orange-600 px-3 rounded-xl">Delete</button></li>;
+        })}
+        </ul>
+      </div>
+      <ToastContainer />
     </div>
-  );
+  )
 }
