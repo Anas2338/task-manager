@@ -5,11 +5,11 @@ import { useRef, useState } from "react";
 import { ToastContainer, toast, Bounce } from 'react-toastify';
 
 export default function Home (){
-  let [tasks, setTasks] = useState<{ title: string; id: string }[]>([]);
+  const [tasks, setTasks] = useState<{ title: string; id: string }[]>([]);
 
-  let inputReference = useRef<HTMLInputElement>(null);
+  const inputReference = useRef<HTMLInputElement>(null);
 
-  let HandleAddTask = () => {
+  const HandleAddTask = () => {
     let inputValue = inputReference?.current?.value as string;
     if (!inputValue){
       return toast.warn('Please Entre Tasks', {
@@ -49,7 +49,7 @@ export default function Home (){
   };
 
   function DeleteTask (e:string){
-    let newArray =  tasks.filter((elem)=> elem.id !== e);
+    const newArray =  tasks.filter((elem)=> elem.id !== e);
     setTasks(newArray);
     toast.error('Task Deleted!', {
       position: "top-right",
