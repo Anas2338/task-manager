@@ -10,7 +10,7 @@ export default function Home (){
   const inputReference = useRef<HTMLInputElement>(null);
 
   const HandleAddTask = () => {
-    let inputValue = inputReference?.current?.value as string;
+    const inputValue = inputReference?.current?.value as string;
     if (!inputValue){
       return toast.warn('Please Entre Tasks', {
         position: "top-right",
